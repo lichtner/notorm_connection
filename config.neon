@@ -1,0 +1,56 @@
+#
+# SECURITY WARNING: it is CRITICAL that this file & directory are NOT accessible directly via a web browser!
+#
+# If you don't protect this directory from direct web access, anybody will be able to see your passwords.
+# http://nette.org/security-warning
+#
+common:
+	php: # PHP configuration
+		date.timezone: Europe/Bratislava
+		# session.save_path: "%tempDir%/sessions"
+		# zlib.output_compression: yes
+
+	services:
+		robotLoader:
+			run: true
+
+# ------------------------------------------------------------------------
+# NotORM Connection configuration
+#
+# All necessary configuration is uncommented. If you want to extend NotORM
+# with your structure or caching uncomment appropriate blocks.
+# -------------------------------------------------------------------------
+
+		connection:
+			class: NotORM\Connection
+			arguments: ['mysql:host=localhost;dbname=sample-db', 'root', '']
+#			arguments: [%database%]
+
+		notorm:
+			factory: [@connection, getNotORM]
+#			arguments: [@notorm_structure, @notorm_cache]
+#
+#		notorm_structure:
+#			class: NotORM_Structure
+#			arguments: ['id', '%s_id', '%ss']
+#
+#		notorm_cache:
+#			class: NotORM_Cache_Database
+#			arguments: [@pdo]
+#
+#		pdo:
+#			factory: [@connection, getPDO]
+
+# if you use this type of configuration uncomment row above "arguments: [%database%]"
+#	database:
+#		driver:   mysql
+#		host:     localhost
+#		database: sample-db
+#		username: root
+#		password:
+
+production < common:
+
+development < common:
+
+console < common:
