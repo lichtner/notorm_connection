@@ -25,14 +25,14 @@ Installing
 		/**
 		 * @var NotORM
 		 */
-		public $db;
+		public $notorm;
 
 		protected function startup() {
-			$this->db = $this->context->notorm;
+			$this->notorm = $this->context->notorm;
 		}
 
 		protected function beforeRender() {
-			$this->template->db = $this->db;
+			$this->template->notorm = $this->notorm;
 		}
 
 	}
@@ -40,12 +40,14 @@ Installing
 	Now you can use notorm in all presenters e.g.:
 
 		public function renderDefault() {
-			$title = $this->db->article[$id]['title'];
+			$title = $this->notorm->article[$id]['title'];
+            // or
+            $this->template->article = $this->notorm->article[$id];
 		}
 
-	or in all templates e.g.:
+	and in template e.g.:
 
-		{$db->article[$id]['title']}
+		{$article['title']}
 
 5. If you need some addition configuration for NotORM you can do it in bootstrap.php:
 
@@ -55,7 +57,7 @@ Installing
 	// NotORM setup
 	$container->notorm->rowClass = 'My_NotORM_Row';
 
-6. Now you can delete Nette/Database directory ;-)
+6. Now you can delete libs/Nette/Database directory ;-)
 
 
 For more information see source code or NotORM and Nette framework documentation.
