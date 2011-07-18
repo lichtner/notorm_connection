@@ -17,7 +17,15 @@ Installing
 
 		$this->context->notorm->...
 
-4. You can create shortcuts in BasePresenter.
+4. If you need some addition configuration for NotORM you can do it in bootstrap.php:
+
+	......
+	$container = $configurator->loadConfig(__DIR__ . '/config.neon');
+
+	// NotORM setup
+	$container->notorm->rowClass = 'My_NotORM_Row';
+
+5. You can create shortcuts in BasePresenter.
 	(X-layers-domain-model-lovers read more only on your own risk! ;-)
 
 	abstract class BasePresenter extends Nette\Application\UI\Presenter
@@ -48,14 +56,6 @@ Installing
 	and in template e.g.:
 
 		{$article['title']}
-
-5. If you need some addition configuration for NotORM you can do it in bootstrap.php:
-
-	......
-	$container = $configurator->loadConfig(__DIR__ . '/config.neon');
-
-	// NotORM setup
-	$container->notorm->rowClass = 'My_NotORM_Row';
 
 6. Now you can delete libs/Nette/Database directory ;-)
 
