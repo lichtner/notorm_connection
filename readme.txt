@@ -1,8 +1,8 @@
-NotORM Connection for Nette Framework 2
+NotORM\Connection for Nette Framework 2
 =======================================
 
 This class create NotORM connection in Nette Framework 2 project with panel for Nette\Debugger.
-For NotORM you can specify your NotORM_Structure or NotORM_Cache.
+For NotORM you can implement your own NotORM_Structure or NotORM_Cache interfaces.
 
 
 Installing
@@ -11,7 +11,20 @@ Installing
 1. Copy notorm_connection/ directory into your nette libs/ project.
 	(of course you need also notorm/ in libs/)
 
-2. Setup config.neon. (see included config.neon file for config possibilities)
+2. Setup config.neon. Basic setup is:
+
+	services:
+		...
+
+		connection:
+			class: NotORM\Connection
+			arguments: ['mysql:host=localhost;dbname=sample-db', 'root', '']
+
+		notorm:
+			factory: [@connection, getNotORM]
+
+
+	(for more possibilities see included example-config.neon file)
 
 3. Now NotORM connection is accessible via context:
 
@@ -60,7 +73,7 @@ Installing
 6. Now you can delete libs/Nette/Database directory ;-)
 
 
-For more information see source code or NotORM and Nette framework documentation.
+For more information see NotORM and Nette framework documentation.
 
 
 License
