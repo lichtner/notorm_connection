@@ -49,8 +49,8 @@ Installing
 
 		public function renderDefault() {
 			$title = $this->notorm->article[$id]['title'];
-            // or
-            $this->template->article = $this->notorm->article[$id];
+			// or
+			$this->template->article = $this->notorm->article[$id];
 		}
 
 	and in template e.g.:
