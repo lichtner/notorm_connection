@@ -24,7 +24,7 @@ Installing
 			factory: [@connection, getNotORM]
 
 
-	(for more possibilities see included example-config.neon file)
+	(for more possibilities see included config.neon.example file)
 
 3. Now NotORM connection is accessible via context:
 
