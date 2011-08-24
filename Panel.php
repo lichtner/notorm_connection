@@ -1,7 +1,5 @@
 <?php
 
-namespace NotORM;
-
 use Nette\Utils\Strings,
 	Nette\Diagnostics\IBarPanel;
 

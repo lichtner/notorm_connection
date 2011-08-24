@@ -1,10 +1,6 @@
 <?php
 
-namespace NotORM;
-
-use Nette\Diagnostics\Debugger,
-	PDO,
-	NotORM;
+use Nette\Diagnostics\Debugger;
 
 /**
  * Service for NotORM and PDO connection
@@ -15,16 +11,7 @@ use Nette\Diagnostics\Debugger,
  * @version	1.0
  *
  */
-class Connection {
-
-	/**
-	 * @var PDO
-	 */
-	private $pdo;
-	/**
-	 * @var NotORM
-	 */
-	private $notorm;
+class Connection /*extends \Nette\DI\Container*/ {
 
 	/**
 	 * Create PDO connection
@@ -33,7 +20,7 @@ class Connection {
 	 * @param string $username
 	 * @param string $password
 	 */
-	public function __construct($dsn = NULL, $username = NULL, $password = NULL) {
+	public static function createServicePDO(Nette\DI\Container $container, $dsn, $username = '', $password = '') {
 		if (is_array($dsn)) {
 			$username = $dsn['username'];
 			$password = $dsn['password'];
@@ -42,36 +29,35 @@ class Connection {
 		$pdo = new PDO($dsn, $username, $password);
 		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 		$pdo->query('SET NAMES utf8');
-
-		$this->pdo = $pdo;
-	}
-
-	public function getPDO() {
-		return $this->pdo;
+		return $pdo;
 	}
 
 	/**
-	 *
+	 * Create Service NotORM
 	 *
 	 * @param IContainer $container
 	 * @param NotORM_Structure $structure
 	 * @param NotORM_Cache $cache
 	 * @param string $notormClassName sometimes you need descendant of NotORM
-	 * @return NotORM
+	 * @return NotORM or descendant
 	 */
-	public function getNotORM($container, $structure = NULL, $cache = NULL, $notormClassName = 'NotORM') {
-		if (!$this->notorm) {
-			$this->notorm = new $notormClassName($this->pdo, $structure, $cache);
+	public static function createServiceNotORM(Nette\DI\Container $container, $structure = NULL, $cache = NULL, $notormClassName = 'NotORM', $notormRowClass = '') {
 
-			$panel = Panel::getInstance();
-			$panel->setPlatform($this->pdo->getAttribute(PDO::ATTR_DRIVER_NAME));
-			Debugger::addPanel($panel);
+		$notorm = new $notormClassName($container->pdo, $structure, $cache);
 
-			$this->notorm->debug = function($query, $parameters) {
-						Panel::getInstance()->logQuery($query, $parameters);
-					};
+		$panel = Panel::getInstance();
+		$panel->setPlatform($container->pdo->getAttribute(PDO::ATTR_DRIVER_NAME));
+		Debugger::addPanel($panel);
+
+		$notorm->debug = function($query, $parameters) {
+					Panel::getInstance()->logQuery($query, $parameters);
+				};
+
+		if ($notormRowClass) {
+			$notorm->setRowClass('NotORM_Row_Trans');
 		}
-		return $this->notorm;
+
+		return $notorm;
 	}
 
 }
