@@ -54,7 +54,7 @@ class Connection /*extends \Nette\DI\Container*/ {
 				};
 
 		if ($notormRowClass) {
-			$notorm->setRowClass('NotORM_Row_Trans');
+			$notorm->setRowClass($notormRowClass);
 		}
 
 		return $notorm;
